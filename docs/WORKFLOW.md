@@ -58,6 +58,21 @@ After implementing, confirm:
 - [ ] If the task produces a running artifact (server, route, component), manually confirm it works
 - [ ] No files were modified outside the scope stated in the plan
 
+### 4.5. Commit
+
+After verification passes, commit all changes to main:
+
+1. Stage all task files: `git add <specific files>` — never `git add -A` (avoid accidentally staging `.env` or other sensitive files)
+2. Write a concise commit message describing what the task built — no Claude attribution, no "Co-Authored-By" lines
+3. Commit: `git commit -m "<message>"`
+
+If the project is on a branch other than main, merge to main after committing:
+```bash
+git checkout main && git merge <branch> --no-ff -m "Merge task X.X — <description>"
+```
+
+For solo work on main (the default), just commit directly — no merge needed.
+
 ### 5. Summarize
 
 Write a short completion summary:

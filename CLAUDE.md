@@ -173,6 +173,17 @@ If you find yourself thinking "while I'm here I'll also add..." — stop. Only b
 
 ---
 
+## Git Commit Rules
+
+After every task is verified, commit the changes. Always:
+
+- Stage specific files by name — never `git add -A` or `git add .`
+- Write a concise commit message describing what was built
+- Never include "Co-Authored-By", "Generated with Claude", or any AI attribution in commit messages
+- Commit directly to main (this is a solo project on main by default)
+
+---
+
 ## API Conventions
 
 - All routes prefixed `/api/v1`

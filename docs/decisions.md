@@ -114,6 +114,18 @@ This file records decisions that were made deliberately, with their rationale. B
 
 ---
 
+## UI: Tailwind CSS v4 + shadcn/ui
+
+**Decision:** The web app uses Tailwind CSS v4 (via `@tailwindcss/vite`) and shadcn/ui for components.
+
+**Why:** Tailwind keeps styles co-located with components and eliminates the need for a separate CSS file per component. shadcn/ui provides accessible, unstyled-by-default primitives that are copied into `src/components/ui/` — meaning we own the code and can customize freely without fighting a library.
+
+**Setup:** `@tailwindcss/vite` handles the Tailwind build. shadcn is initialized with Tailwind v4 + Vite. The `@/` path alias maps to `src/` and is configured in both `tsconfig.app.json` and `vite.config.ts`. Components live in `src/components/ui/`.
+
+**Do not** import shadcn components from a node_modules package — they live in `src/components/ui/` and are ours to edit.
+
+---
+
 ## Blueprint Ownership Verified on Every Request
 
 **Decision:** Every service function that reads or modifies a blueprint, category, or expense verifies that the blueprint's `user_id` matches the requesting user's ID.

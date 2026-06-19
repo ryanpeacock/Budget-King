@@ -42,6 +42,8 @@ Ledger, Bucket, Account, and Transaction are defined in the full spec and will b
 | Frontend | React + Vite | SPA, auth-gated |
 | Routing | TanStack Router | File-based, type-safe route params, route loaders |
 | Server State | TanStack Query | Owns all data fetched from the API |
+| Styling | Tailwind CSS v4 | Via `@tailwindcss/vite` plugin — no PostCSS config needed |
+| UI Components | shadcn/ui | Copied into `src/components/ui/`, owned and editable — not a node_modules import |
 | Backend | Node.js + Express | REST API, TypeScript |
 | Database | PostgreSQL | Run directly locally — no Docker during MVP |
 | ORM | Drizzle ORM | Schema-as-code, explicit query builder, migration support |
@@ -156,11 +158,11 @@ apps/web/src/
 │   │   ├── ExpenseRow.tsx          # Single expense, 3-column display
 │   │   ├── ZeroBasedTracker.tsx    # Running balance → zero indicator
 │   │   └── FrequencyBadge.tsx
-│   └── ui/
-│       ├── Button.tsx
-│       ├── Input.tsx
-│       ├── Modal.tsx
-│       └── CurrencyDisplay.tsx
+│   └── ui/                         # shadcn/ui components live here — owned, editable
+│       ├── button.tsx              # Seeded by shadcn init
+│       ├── Input.tsx               # Custom — see Task 4.4
+│       ├── Modal.tsx               # Custom — see Task 4.4
+│       └── CurrencyDisplay.tsx     # Custom — see Task 4.4
 │
 ├── api/
 │   └── blueprints.ts               # All TanStack Query hooks for blueprints

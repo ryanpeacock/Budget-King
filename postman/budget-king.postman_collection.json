@@ -1,0 +1,427 @@
+{
+  "info": {
+    "name": "Budget King API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "All MVP endpoints for the Budget King API. Base URL: http://localhost:3000/api/v1.\n\nUsage:\n1. Set the `baseUrl` variable if needed (defaults to localhost:3000/api/v1).\n2. Run \"Auth / Login\" — the test script auto-saves the access token to `accessToken`.\n3. All protected routes use `{{accessToken}}` via the collection-level Bearer auth.\n4. Set `blueprintId`, `categoryId`, `expenseId` variables as you work through a session."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "string",
+      "description": "Set automatically by the Login request test script."
+    },
+    {
+      "key": "blueprintId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "categoryId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "expenseId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{accessToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.accessToken) {",
+                  "  pm.collectionVariables.set('accessToken', res.accessToken);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Me",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/auth/me", "host": ["{{baseUrl}}"], "path": ["auth", "me"] }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/auth/refresh", "host": ["{{baseUrl}}"], "path": ["auth", "refresh"] },
+            "description": "Refresh token is sent automatically via the HttpOnly cookie set at login."
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/auth/logout", "host": ["{{baseUrl}}"], "path": ["auth", "logout"] }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Blueprints",
+      "item": [
+        {
+          "name": "List Blueprints",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/blueprints", "host": ["{{baseUrl}}"], "path": ["blueprints"] }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Blueprint",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.id) {",
+                  "  pm.collectionVariables.set('blueprintId', res.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "{{baseUrl}}/blueprints", "host": ["{{baseUrl}}"], "path": ["blueprints"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"My Budget\",\n  \"frequency\": \"biweekly\",\n  \"incomeAmount\": \"3200.00\",\n  \"categories\": [\n    {\n      \"name\": \"Housing\",\n      \"sortOrder\": 1,\n      \"expenses\": [\n        {\n          \"name\": \"Rent\",\n          \"amountAnnual\": \"18000.00\",\n          \"sortOrder\": 1\n        }\n      ]\n    },\n    {\n      \"name\": \"Food\",\n      \"sortOrder\": 2,\n      \"expenses\": [\n        {\n          \"name\": \"Groceries\",\n          \"amountAnnual\": \"6000.00\",\n          \"sortOrder\": 1\n        },\n        {\n          \"name\": \"Dining Out\",\n          \"amountAnnual\": \"2400.00\",\n          \"sortOrder\": 2\n        }\n      ]\n    },\n    {\n      \"name\": \"Savings\",\n      \"sortOrder\": 3,\n      \"expenses\": [\n        {\n          \"name\": \"Emergency Fund\",\n          \"amountAnnual\": \"50400.00\",\n          \"sortOrder\": 1\n        }\n      ]\n    }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Creates a Blueprint atomically. All categories and expenses are inserted in a single DB transaction. incomeAmount must equal the sum of all expenses (zero-based). The example body sums to $76,800/year = $3,200 bi-weekly, matching the incomeAmount."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Blueprint",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/blueprints/{{blueprintId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["blueprints", "{{blueprintId}}"]
+            },
+            "description": "Returns the full blueprint with income, categories, and expenses. Each expense includes computed amount_per_paycheck and amount_monthly. Includes top-level remaining field."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Blueprint",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/blueprints/{{blueprintId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["blueprints", "{{blueprintId}}"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Blueprint Name\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Updates name and/or frequency. Both fields are optional."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Blueprint",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/blueprints/{{blueprintId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["blueprints", "{{blueprintId}}"]
+            },
+            "description": "Deletes the blueprint and all children (income, categories, expenses) via Postgres CASCADE."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "Create Category",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.id) {",
+                  "  pm.collectionVariables.set('categoryId', res.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/blueprints/{{blueprintId}}/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["blueprints", "{{blueprintId}}", "categories"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Transportation\",\n  \"sort_order\": 4\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/blueprints/{{blueprintId}}/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["blueprints", "{{blueprintId}}", "categories", "{{categoryId}}"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Transport\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Rename or update sort_order. Both fields are optional."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Category",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/blueprints/{{blueprintId}}/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["blueprints", "{{blueprintId}}", "categories", "{{categoryId}}"]
+            },
+            "description": "Deletes the category and all its expenses via Postgres CASCADE."
+          },
+          "response": []
+        },
+        {
+          "name": "Reorder Categories",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/blueprints/{{blueprintId}}/categories/reorder",
+              "host": ["{{baseUrl}}"],
+              "path": ["blueprints", "{{blueprintId}}", "categories", "reorder"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  { \"id\": \"<category-uuid-1>\", \"sort_order\": 1 },\n  { \"id\": \"<category-uuid-2>\", \"sort_order\": 2 }\n]",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Batch-updates sort_order for all categories in a single transaction."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Expenses",
+      "item": [
+        {
+          "name": "Create Expense",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.id) {",
+                  "  pm.collectionVariables.set('expenseId', res.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/blueprints/{{blueprintId}}/expenses",
+              "host": ["{{baseUrl}}"],
+              "path": ["blueprints", "{{blueprintId}}", "expenses"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"category_id\": \"{{categoryId}}\",\n  \"name\": \"Car Payment\",\n  \"amount_annual\": \"4800.00\",\n  \"sort_order\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Expense",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/blueprints/{{blueprintId}}/expenses/{{expenseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["blueprints", "{{blueprintId}}", "expenses", "{{expenseId}}"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Car Payment\",\n  \"amount_annual\": \"5400.00\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Updates name and/or amount_annual. Both fields are optional."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Expense",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/blueprints/{{blueprintId}}/expenses/{{expenseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["blueprints", "{{blueprintId}}", "expenses", "{{expenseId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reorder Expenses",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/blueprints/{{blueprintId}}/expenses/reorder",
+              "host": ["{{baseUrl}}"],
+              "path": ["blueprints", "{{blueprintId}}", "expenses", "reorder"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  { \"id\": \"<expense-uuid-1>\", \"sort_order\": 1 },\n  { \"id\": \"<expense-uuid-2>\", \"sort_order\": 2 }\n]",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Batch-updates sort_order for all expenses in a single transaction."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/health", "host": ["{{baseUrl}}"], "path": ["health"] }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

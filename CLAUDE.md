@@ -161,6 +161,22 @@ If you find yourself thinking "while I'm here I'll also add..." — stop. Only b
 | `docs/vision.md` | Product context — read if you need to understand *why* something works a certain way |
 | `docs/decisions.md` | Architectural decisions and their rationale — check before suggesting alternatives |
 | `docs/WORKFLOW.md` | Task implementation process — follow this for every task |
+| `postman/budget-king.postman_collection.json` | Postman collection — must stay in sync with all API routes |
+
+---
+
+## Postman Collection
+
+The collection at `postman/budget-king.postman_collection.json` is the canonical manual test client for the API. Import via Postman → File → Import. No separate environment file is needed — all variables are collection-scoped.
+
+**Collection variables:** `baseUrl` (default: `http://localhost:3000/api/v1`), `accessToken` (auto-set by Login request), `blueprintId` / `categoryId` / `expenseId` (auto-set by their respective Create requests).
+
+**Maintenance rule — enforced in every task:** Any task that adds, removes, renames, or changes the shape of a route must update the collection in the same commit. Specifically:
+- Added a route → add a request in the correct folder with a correct example body
+- Removed a route → delete the request
+- Changed a request body field → update the example body
+- Changed a response shape → update the request description
+- Renamed a path segment → update the URL
 
 ---
 

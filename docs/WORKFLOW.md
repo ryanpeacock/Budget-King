@@ -48,6 +48,7 @@ Wait for confirmation before proceeding if anything in the plan is uncertain.
 - Follow all rules in `CLAUDE.md`
 - Do only what the task asks — nothing more
 - If the task prompt references the spec (e.g. "from the spec", "as specified"), read the relevant section of `spec.md` before implementing
+- If the task adds, removes, renames, or changes any API route, update `postman/budget-king.postman_collection.json` to match before committing
 
 ### 4. Verify
 
@@ -57,6 +58,7 @@ After implementing, confirm:
 - [ ] TypeScript compiles without errors in affected packages (`pnpm --filter <package> tsc --noEmit`)
 - [ ] If the task produces a running artifact (server, route, component), manually confirm it works
 - [ ] No files were modified outside the scope stated in the plan
+- [ ] If any route changed: `postman/budget-king.postman_collection.json` is updated to match
 
 ### 4.5. Commit
 

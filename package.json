@@ -1,5 +1,8 @@
 {
   "name": "budget-king",
   "private": true,
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "scripts": {
+    "build": "pnpm --filter @budget-king/shared run typecheck && pnpm --filter @budget-king/api run typecheck && pnpm --filter @budget-king/web run typecheck"
+  }
 }
